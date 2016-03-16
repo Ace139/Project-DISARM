@@ -1,0 +1,53 @@
+set terminal pngcairo dash font "Arial-Bold,12" fontscale 1.0 size 900, 700 
+set output 'demo.png'
+
+#set multiplot layout 2,1
+set multiplot
+#set multiplot layout 1,2
+set key left top spacing 1;
+set key inside left top vertical Right noreverse enhanced autotitles box linetype 0 linewidth 1.000
+
+set xlabel "TIME(in HRS.)"
+set ylabel "VALUES (in Parts Per Million)"
+set yrange [0:1000]
+set xdata time
+set timefmt "%H:%M:%S"
+set format x "%H"
+set datafile separator "\t"
+plot "output1.txt" using 1:2 title "NO2-Day1(40 ) with linespoints  pt 4 ps 2 lt 5  lw 2 lc rgb "red",\
+"output1.txt" using 1:3 with linespoint t "CO2-Day1(1000)",\
+"output2.txt" using 1:2 with linespoint t "NO2-Day2(40 )",\
+"output2.txt" using 1:3 with linespoint t "CO2-Day2(1000)",\
+"output3.txt" using 1:2 with linespoint t "NO2-Day3(40 )",\
+"output3.txt" using 1:3 with linespoint t "CO2-Day3(1000)"
+
+#"output.txt" using 1:4 with lines t "Dust(200)",\
+#"output.txt" using 1:5 with lines t "LPG(1000)",\
+#"13E.txt" using 1:6 with lines t "Smoke(4000)",\
+#"13E.txt" using 1:7 with lines t "SO2(100)"
+
+
+
+set ylabel "PPM"
+set yrange [0:200]
+set key left top spacing 1;
+set xlabel ""
+set size 0.48,0.42
+set origin  0.50,0.55
+
+plot "output1.txt" using 1:2 with lines t "",\
+"output1.txt" using 1:3 with lines t "",\
+"output2.txt" using 1:2 with lines t "",\
+"output2.txt" using 1:3 with lines t "",\
+"output3.txt" using 1:2 with lines t "",\
+"output3.txt" using 1:3 with lines t ""
+
+
+#"output.txt" using 1:4 with lines t ""
+#"13E.txt" using 1:5 with lines t "",\
+#"13E.txt" using 1:6 with lines t "",\
+#"13E.txt" using 1:7 with lines t ""
+
+
+
+unset multiplot
