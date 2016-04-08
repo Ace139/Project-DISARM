@@ -3,7 +3,7 @@ import serial
 
 connected = False
 
-locations=['/dev/ttyUSB0','/dev/ttyUSB1','/dev/ttyUSB2','/dev/ttyUSB3','/dev/ttyASM0']
+locations=['/dev/ttyUSB0','/dev/ttyUSB1','/dev/ttyUSB2','/dev/ttyUSB3','/dev/ttyACM0']
 
 for device in locations:
     try:
