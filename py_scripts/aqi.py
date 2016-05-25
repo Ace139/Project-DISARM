@@ -11,7 +11,7 @@ src = open(sys.argv[1])
 dst = open(sys.argv[2], 'w')
 
 xtime = list()
-count, no2, co2, co, dust, humid, temp, lpg, smoke, zeros = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+count, no2, co2, co, dust, humid, temp, so2 = 0, 0, 0, 0, 0, 0, 0, 0
 
 for line in src:
 	buffer = line.rstrip("\n").split(",")
@@ -22,16 +22,15 @@ for line in src:
 	dust += abs(float(buffer[5]))
 	humid += float(buffer[6])
 	temp += float(buffer[7])
-	lpg += float(buffer[10])
-	smoke += float(buffer[11])
+	so2 += float(buffer[8])
 	count += 1
 
-	if count == 210:
+	if count == 1200:
 
-		dust /= 210
-		no2 /= 210
-		#so2 /= 210
-		co /= 210
+		dust /= 1200
+		no2 /= 1200
+		so2 /= 1200
+		co /= 1200
 		i_high, i_low, b_high, b_low = 0.0, 0.0, 0.0, 0.0
 
 		if 0.0 <= dust <= 12:
@@ -51,7 +50,8 @@ for line in src:
 		else:
 			pass
 
-		si_dust = ((i_high - i_low) / (b_high, b_low)) * (dust - b_low) + i_low
+		si_dust = ((i_high - i_low) / (b_high - b_low)) * (dust - b_low) + i_low
+		print("Dust ",si_dust)
 
 		if 0.0 <= no2 <= 53:
 			b_low, b_high, i_low, i_high = 0, 53, 0, 50
@@ -70,26 +70,28 @@ for line in src:
 		else:
 			pass
 
-		si_no2 = ((i_high - i_low) / (b_high, b_low)) * (dust - b_low) + i_low
+		si_no2 = ((i_high - i_low) / (b_high - b_low)) * (no2 - b_low) + i_low
+		print("NO2 ",si_no2)
 
-		# if 0.0 <= so2 <= 35:
-		# 	b_low, b_high, i_low, i_high = 0, 35, 0, 50
-		# elif 36 <= so2 <= 75:
-		# 	b_low, b_high, i_low, i_high = 36, 75, 51, 100
-		# elif 76 <= so2 <= 185:
-		# 	b_low, b_high, i_low, i_high = 76, 185, 101, 150
-		# elif 186 <= so2 <= 304:
-		# 	b_low, b_high, i_low, i_high = 186, 304, 151, 200
-		# elif 305 <= so2 <= 604:
-		# 	b_low, b_high, i_low, i_high = 305, 604, 201, 300
-		# elif 605 <= so2 <= 804:
-		# 	b_low, b_high, i_low, i_high = 605, 804, 301, 400
-		# elif 805 <= so2 <= 1004:
-		# 	b_low, b_high, i_low, i_high = 805, 1004, 401, 500
-		# else:
-		# 	pass
+		if 0.0 <= so2 <= 35:
+			b_low, b_high, i_low, i_high = 0, 35, 0, 50
+		elif 36 <= so2 <= 75:
+		 	b_low, b_high, i_low, i_high = 36, 75, 51, 100
+		elif 76 <= so2 <= 185:
+		 	b_low, b_high, i_low, i_high = 76, 185, 101, 150
+		elif 186 <= so2 <= 304:
+			b_low, b_high, i_low, i_high = 186, 304, 151, 200
+		elif 305 <= so2 <= 604:
+		 	b_low, b_high, i_low, i_high = 305, 604, 201, 300
+		elif 605 <= so2 <= 804:
+		 	b_low, b_high, i_low, i_high = 605, 804, 301, 400
+		elif 805 <= so2 <= 1004:
+		 	b_low, b_high, i_low, i_high = 805, 1004, 401, 500
+		else:
+		 	pass
 
-		# si_so2 = ((i_high - i_low) / (b_high, b_low)) * (dust - b_low) + i_low
+		si_so2 = ((i_high - i_low) / (b_high - b_low)) * (so2 - b_low) + i_low
+		print("SO2 ",si_so2)
 
 		if 0.0 <= co <= 4.4:
 			b_low, b_high, i_low, i_high = 0, 4.4, 0, 50
@@ -108,13 +110,14 @@ for line in src:
 		else:
 			pass
 
-		si_co = ((i_high - i_low) / (b_high, b_low)) * (dust - b_low) + i_low
+		si_co = ((i_high - i_low) / (b_high - b_low)) * (co - b_low) + i_low
+		print("CO ",si_co)
 
-		avg_time = str(timedelta(seconds=sum(map(lambda f: int(f[0])*3600 + int(f[1])*60 + int(f[2]), map(lambda f: f.split(':'), xtime)))/len(xtime)))
-		high = str(max(si_co, si_no2, si_dust)) # so2 excluded
+		avg_time = str(timedelta(seconds=sum(map(lambda f: int(f[0])*3600 + int(f[1])*60 + int(f[2]), map(lambda f: f.split(':'), xtime)))//len(xtime)))
+		high = str(max(si_co, si_no2, si_dust, si_so2))
 		dst.write(avg_time + "," + high + "\n")
 
-		count, no2, co2, co, dust, humid, temp, lpg, smoke, zeros = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		count, no2, co2, co, dust, humid, temp, so2, zeros = 0, 0, 0, 0, 0, 0, 0, 0, 0
 		xtime = []
 
 	else:
