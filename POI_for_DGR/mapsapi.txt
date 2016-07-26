@@ -1,0 +1,18 @@
+Important Links :
+# https://developers.google.com/places/web-service/details
+# https://developers.google.com/places/web-service/search
+# https://developers.google.com/places/supported_types
+# http://stackoverflow.com/questions/9614258/how-to-get-20-result-from-google-places-api
+
+    Latitude: 1 deg = 110.574 km
+    Longitude: 1 deg = 111.320*cos(latitude) km
+
+
+https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-23.5204,87.3119&radius=500&types=factory&key=AIzaSyDOQOEXAHXyqzS9JYDQuKblMTpjCHZqLsI
+
+API : AIzaSyDOQOEXAHXyqzS9JYDQuKblMTpjCHZqLsI
+
+Use : http://docs.python-requests.org/en/master/
+
+1km = 0.00899 degree shift in latitude
+1km = 0.009797 degree shift in longitude
